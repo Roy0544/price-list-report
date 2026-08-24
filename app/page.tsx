@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react";
 import {
-  FlaskConical,
   Search,
   Droplets,
   TestTube2,
@@ -18,28 +17,52 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
+  Mail,
+  Globe,
+  MapPin,
   Sparkles,
-  Info,
+  CalendarPlus,
+  Stethoscope,
 } from "lucide-react";
 import { LAB_DATA, Category, TestItem } from "@/data/tests";
 
-// Map category names to icons and theme accents
+// Official Dr. Roy's Laboratory Vector Logo
+function BrandLogo({ className = "w-8 h-8" }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className={className} aria-label="Dr. Roy's Laboratory Logo">
+      <defs>
+        <linearGradient id="labGreenBg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#008000" />
+          <stop offset="100%" stopColor="#006400" />
+        </linearGradient>
+      </defs>
+      {/* Circular Green Badge Background */}
+      <circle cx="16" cy="16" r="16" fill="url(#labGreenBg)" />
+      {/* Crisp White Medical Microscope / Biotech Symbol */}
+      <g transform="translate(4, 4)" fill="#ffffff">
+        <path d="M7 19c-1.1 0-2 .9-2 2h14c0-1.1-.9-2-2-2h-4v-2h3c1.1 0 2-.9 2-2h-2v-1c0-1.66-1.34-3-3-3h-1V7.83l1.88 1.88 1.41-1.41L14.41 5.41 13 4 9.17 7.83l1.41 1.41L12 7.83V11h-1c-1.66 0-3 1.34-3 3v1H6c0 1.1.9 2 2 2h3v2H7zm3-5c0-.55.45-1 1-1h2c.55 0 1 .45 1 1v1h-4v-1z" />
+      </g>
+    </svg>
+  );
+}
+
+// Map category names to icons
 function getCategoryIcon(name: string) {
   switch (name) {
     case "Hematology":
       return Droplets;
     case "Biochemistry & Diabetes":
-      return FlaskConical;
+      return TestTube2;
     case "Lipid Profile":
       return HeartPulse;
     case "Urine Routine Examination":
-      return TestTube2;
-    case "Stool Examination":
       return Microscope;
+    case "Stool Examination":
+      return Layers;
     case "Bacteriology & Culture":
       return Dna;
     default:
-      return Layers;
+      return Stethoscope;
   }
 }
 
@@ -49,12 +72,12 @@ export default function PricingGuidePage() {
   const [activeTab, setActiveTab] = useState<"tests" | "support">("tests");
   const [expandedTestId, setExpandedTestId] = useState<string | null>(null);
 
-  // Total test count across all categories
+  // Total test count
   const totalTestCount = useMemo(() => {
     return LAB_DATA.categories.reduce((acc, cat) => acc + cat.tests.length, 0);
   }, []);
 
-  // Filter categories and tests based on query and filter chip
+  // Filtered categories & tests
   const filteredCategories = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
@@ -95,145 +118,150 @@ export default function PricingGuidePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fb] flex justify-center selection:bg-[#0052cc] selection:text-white">
-      {/* Mobile container centered on larger screens */}
-      <div className="w-full max-w-md min-h-screen bg-[#f8f9fb] text-[#191c1e] pb-36 flex flex-col relative shadow-xl border-x border-[#e7e8ea]/60">
+    <div className="min-h-screen bg-[#f7f9fb] flex justify-center selection:bg-[#008000] selection:text-white">
+      {/* Mobile-first clinical frame centered on desktop */}
+      <div className="w-full max-w-md min-h-screen bg-[#f7f9fb] text-slate-900 pb-36 flex flex-col relative shadow-xl border-x border-slate-200">
         
-        {/* Top Header */}
-        <header className="sticky top-0 z-40 bg-[#f8f9fb]/95 backdrop-blur-md px-4 pt-3.5 pb-2.5 border-b border-[#e7e8ea]/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center justify-between mb-2.5">
-            <div className="w-9 h-9 rounded-full bg-[#dae2ff] flex items-center justify-center text-[#003d9b] shadow-xs">
-              <FlaskConical className="w-5 h-5" strokeWidth={2.2} />
+        {/* Top Clinical Header Bar with Letterhead Accent */}
+        <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+          {/* Medical Teal Accent Strip */}
+          <div className="h-1.5 w-full bg-gradient-to-r from-[#0d9488] via-[#008000] to-[#0f172a]" />
+
+          <div className="px-4 pt-3 pb-2.5">
+            {/* Brand Title Row */}
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2.5">
+                <BrandLogo className="w-9 h-9 shrink-0 drop-shadow-xs" />
+                <div>
+                  <h1 className="font-slab text-[18px] font-black tracking-tight text-slate-900 leading-none">
+                    DR. ROY&apos;S LABORATORY
+                  </h1>
+                  <p className="text-[10px] font-semibold text-slate-500 tracking-wider uppercase mt-0.5">
+                    Test Price List & Diagnostic Guide
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <a
+                  href={`tel:${LAB_DATA.phone}`}
+                  aria-label="Call lab"
+                  className="w-8 h-8 rounded-full bg-emerald-50 text-[#008000] flex items-center justify-center hover:bg-emerald-100 active:scale-95 transition-all border border-emerald-200"
+                >
+                  <Phone className="w-4 h-4" />
+                </a>
+              </div>
             </div>
 
-            <div className="text-center">
-              <h1 className="text-[19px] font-bold tracking-tight text-[#003d9b] leading-tight">
-                DR. ROY&apos;S LABORATORY
-              </h1>
-              <p className="text-[11px] font-medium text-[#434654] tracking-wide">
-                Test Pricing & Diagnostic Guide
-              </p>
+            {/* Location Subtext */}
+            <div className="flex items-center gap-1 text-[11px] text-slate-500 mb-2.5 font-medium">
+              <MapPin className="w-3 h-3 text-[#008000] shrink-0" />
+              <span className="truncate">Sarkheldih Subhash Chowk, Jamtara</span>
             </div>
 
-            <button
-              onClick={() => {
-                if (activeTab !== "tests") setActiveTab("tests");
-                const searchInput = document.getElementById("test-search-input");
-                searchInput?.focus();
-              }}
-              aria-label="Focus search"
-              className="w-9 h-9 rounded-full bg-[#f3f4f6] flex items-center justify-center text-[#003d9b] hover:bg-[#e7e8ea] active:scale-95 transition-all"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Search Bar */}
-          <div className="relative w-full">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#737685]" />
-            <input
-              id="test-search-input"
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                if (activeTab !== "tests") setActiveTab("tests");
-                setSearchQuery(e.target.value);
-              }}
-              placeholder="Search tests, CBC, Sugar, Lipid, Urine..."
-              className="w-full bg-[#f3f4f6] border border-[#c3c6d6] text-[#191c1e] placeholder-[#737685] rounded-full py-2 pl-10 pr-9 text-sm focus:outline-none focus:border-[#0052cc] focus:ring-2 focus:ring-[#0052cc]/20 transition-all shadow-xs"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737685] hover:text-[#191c1e] p-0.5 rounded-full hover:bg-[#e1e2e4]"
-                aria-label="Clear search"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-
-          {/* Category Filter Chips */}
-          {activeTab === "tests" && (
-            <div className="flex items-center gap-1.5 mt-2.5 overflow-x-auto no-scrollbar pb-1">
-              <button
-                onClick={() => setSelectedCategory("all")}
-                className={`text-[11px] px-3 py-1 rounded-full font-medium transition-all whitespace-nowrap ${
-                  selectedCategory === "all"
-                    ? "bg-[#003d9b] text-white shadow-xs"
-                    : "bg-white text-[#434654] border border-[#c3c6d6] hover:bg-[#f3f4f6]"
-                }`}
-              >
-                All ({totalTestCount})
-              </button>
-              {LAB_DATA.categories.map((cat) => (
+            {/* Search Input Bar (Component C) */}
+            <div className="relative w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <Search className="w-4 h-4" />
+              </div>
+              <input
+                id="test-search-input"
+                type="text"
+                value={searchQuery}
+                onChange={(e) => {
+                  if (activeTab !== "tests") setActiveTab("tests");
+                  setSearchQuery(e.target.value);
+                }}
+                placeholder="Search tests (e.g. CBC, Lipid, Urine, HbA1c)..."
+                className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#008000] focus:border-[#008000] focus:bg-white transition-all shadow-2xs"
+              />
+              {searchQuery && (
                 <button
-                  key={cat.categoryName}
-                  onClick={() => setSelectedCategory(cat.categoryName)}
-                  className={`text-[11px] px-3 py-1 rounded-full font-medium transition-all whitespace-nowrap ${
-                    selectedCategory === cat.categoryName
-                      ? "bg-[#003d9b] text-white shadow-xs"
-                      : "bg-white text-[#434654] border border-[#c3c6d6] hover:bg-[#f3f4f6]"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-0.5 rounded-full"
+                  aria-label="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Category Filter Chips (Active: #008000) */}
+            {activeTab === "tests" && (
+              <div className="flex items-center gap-1.5 mt-2.5 overflow-x-auto no-scrollbar pb-0.5">
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className={`text-[11.5px] px-3 py-1 rounded-full font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    selectedCategory === "all"
+                      ? "bg-[#008000] text-white shadow-xs"
+                      : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
                   }`}
                 >
-                  {cat.categoryName} ({cat.tests.length})
+                  All Tests ({totalTestCount})
                 </button>
-              ))}
-            </div>
-          )}
+                {LAB_DATA.categories.map((cat) => (
+                  <button
+                    key={cat.categoryName}
+                    onClick={() => setSelectedCategory(cat.categoryName)}
+                    className={`text-[11.5px] px-3 py-1 rounded-full font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                      selectedCategory === cat.categoryName
+                        ? "bg-[#008000] text-white shadow-xs"
+                        : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    {cat.categoryName} ({cat.tests.length})
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </header>
 
-        {/* Main Content */}
-        <main className="flex-1 px-4 py-3.5 space-y-3.5">
+        {/* Main Content Area */}
+        <main className="flex-1 px-3.5 py-3.5 space-y-3">
           {activeTab === "tests" ? (
             <>
-              {/* Search results summary count when searching */}
+              {/* Search results count summary */}
               {searchQuery && (
-                <div className="flex justify-between items-center text-xs text-[#434654] px-1">
+                <div className="flex justify-between items-center text-xs text-slate-500 px-1 font-medium">
                   <span>
-                    Found <strong>{totalMatchingTests}</strong> {totalMatchingTests === 1 ? "test" : "tests"}
+                    Showing <strong>{totalMatchingTests}</strong> matching {totalMatchingTests === 1 ? "investigation" : "investigations"}
                   </span>
                   <button
                     onClick={() => setSearchQuery("")}
-                    className="text-[#0052cc] hover:underline font-medium"
+                    className="text-[#008000] hover:underline font-semibold"
                   >
-                    Clear search
+                    Reset
                   </button>
                 </div>
               )}
 
-              {/* Category Sections */}
+              {/* Test Category Sections */}
               {filteredCategories.length > 0 ? (
                 filteredCategories.map((category) => {
                   const Icon = getCategoryIcon(category.categoryName);
                   return (
-                    <section
-                      key={category.categoryName}
-                      className="bg-white rounded-xl p-3.5 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border-l-4 border-[#0c56d0] border-y border-r border-[#e7e8ea]/70 transition-all hover:shadow-[0px_6px_16px_rgba(0,0,0,0.08)]"
-                    >
-                      {/* Section Header */}
-                      <div className="flex items-center justify-between mb-2 pb-2 border-b border-[#f3f4f6]">
+                    <section key={category.categoryName} className="space-y-2">
+                      {/* Category Header Strip */}
+                      <div className="flex items-center justify-between px-1.5 pt-1">
                         <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-md bg-[#dae2ff]/60 flex items-center justify-center text-[#003d9b]">
+                          <span className="w-5 h-5 rounded bg-emerald-100 text-[#008000] flex items-center justify-center">
                             <Icon className="w-3.5 h-3.5" />
                           </span>
-                          <div>
-                            <h2 className="text-[15px] font-semibold text-[#191c1e] leading-tight">
-                              {category.categoryName}
-                            </h2>
-                            <span className="text-[10px] text-[#737685] font-medium">
-                              {category.reportType}
-                            </span>
-                          </div>
+                          <h2 className="font-slab font-bold text-slate-900 text-sm tracking-tight">
+                            {category.categoryName}
+                          </h2>
+                          <span className="text-[10px] text-slate-500 font-medium bg-slate-200/60 px-1.5 py-0.2 rounded">
+                            {category.reportType}
+                          </span>
                         </div>
-
-                        <span className="text-[11px] font-medium text-[#434654] bg-[#f3f4f6] px-2 py-0.5 rounded-full">
-                          {category.tests.length} tests
+                        <span className="text-[11px] font-semibold text-slate-500 font-mono">
+                          {category.tests.length}
                         </span>
                       </div>
 
-                      {/* Test Item List */}
-                      <div className="divide-y divide-[#f3f4f6]">
+                      {/* Test Cards List (Component D) */}
+                      <div className="space-y-2">
                         {category.tests.map((test) => {
                           const isExpanded = expandedTestId === test.id;
                           const isPanel = test.unit === "Panel";
@@ -242,67 +270,72 @@ export default function PricingGuidePage() {
                             <div
                               key={test.id}
                               onClick={() => toggleExpand(test.id)}
-                              className={`py-2.5 px-1.5 rounded-lg cursor-pointer transition-colors ${
-                                isExpanded ? "bg-[#f8f9fb]" : "hover:bg-[#f8f9fb]/70"
+                              className={`bg-white border rounded-xl p-3.5 transition-all cursor-pointer shadow-2xs ${
+                                isExpanded
+                                  ? "border-[#008000] ring-1 ring-[#008000]/20 bg-slate-50/50 shadow-sm"
+                                  : "border-slate-200 hover:border-slate-300 hover:shadow-xs"
                               }`}
                             >
-                              <div className="flex justify-between items-center gap-2">
+                              <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-1.5 flex-wrap">
-                                    <span className="text-[13.5px] font-medium text-[#191c1e] leading-snug">
+                                    <span className="w-2 h-2 rounded-full bg-[#008000] shrink-0" />
+                                    <h3 className="font-bold text-slate-900 text-[13.5px] leading-tight">
                                       {test.name}
-                                    </span>
-                                    {isPanel && (
-                                      <span className="bg-[#6ae1ff]/20 text-[#00687a] border border-[#00687a]/20 text-[9.5px] font-bold px-1.5 py-0.2 rounded">
-                                        PACKAGE
+                                    </h3>
+                                    {isPanel ? (
+                                      <span className="text-[10px] font-bold bg-[#008000] text-white px-1.5 py-0.2 rounded shadow-2xs">
+                                        PROFILE PANEL
+                                      </span>
+                                    ) : (
+                                      <span className="text-[10.5px] font-semibold bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded border border-emerald-200">
+                                        {category.categoryName.split(" ")[0]}
                                       </span>
                                     )}
                                   </div>
 
-                                  {/* Compact specimen tag */}
-                                  <p className="text-[11px] text-[#737685] mt-0.5 truncate">
-                                    {test.specimen}
+                                  {/* Subtitle / Specimen Info */}
+                                  <p className="text-[11.5px] text-slate-500 mt-1 truncate">
+                                    Sample: {test.specimen}
                                   </p>
                                 </div>
 
-                                <div className="flex items-center gap-2 shrink-0">
-                                  <span className="bg-[#0052cc] text-white text-[12px] font-bold px-3 py-1 rounded-full shadow-xs tracking-wide">
+                                {/* Price block with IBM Plex Mono font */}
+                                <div className="text-right shrink-0">
+                                  <div className="font-mono font-bold text-base text-slate-900 leading-tight">
                                     ₹{test.suggestedPrice}
+                                  </div>
+                                  <span className="text-[9.5px] text-slate-400 uppercase tracking-wider font-semibold block">
+                                    Standard Rate
                                   </span>
-                                  <button
-                                    aria-label="Toggle details"
-                                    className="text-[#737685] p-0.5"
-                                  >
-                                    {isExpanded ? (
-                                      <ChevronUp className="w-3.5 h-3.5" />
-                                    ) : (
-                                      <ChevronDown className="w-3.5 h-3.5" />
-                                    )}
-                                  </button>
                                 </div>
                               </div>
 
-                              {/* Expandable test detail sheet */}
+                              {/* Expandable Diagnostic Details */}
                               {isExpanded && (
-                                <div className="mt-2.5 pt-2 border-t border-[#e7e8ea] text-xs space-y-1.5 text-[#434654] bg-white p-2.5 rounded-md shadow-xs">
+                                <div className="mt-3 pt-2.5 border-t border-slate-200 text-xs space-y-2 bg-white p-2.5 rounded-lg border border-slate-100">
                                   <div className="grid grid-cols-2 gap-2 text-[11px]">
-                                    <div>
-                                      <span className="text-[#737685] block font-medium">Normal Ref Range</span>
-                                      <span className="font-semibold text-[#191c1e]">{test.refRange}</span>
+                                    <div className="bg-slate-50 p-2 rounded">
+                                      <span className="text-slate-500 block font-medium">Normal Ref Range</span>
+                                      <span className="font-mono font-semibold text-slate-900 mt-0.5 block">{test.refRange}</span>
                                     </div>
-                                    <div>
-                                      <span className="text-[#737685] block font-medium">Unit of Measure</span>
-                                      <span className="font-semibold text-[#191c1e]">{test.unit}</span>
+                                    <div className="bg-slate-50 p-2 rounded">
+                                      <span className="text-slate-500 block font-medium">Unit of Measure</span>
+                                      <span className="font-mono font-semibold text-slate-900 mt-0.5 block">{test.unit}</span>
                                     </div>
                                   </div>
-                                  <div className="text-[11px] pt-1 border-t border-[#f3f4f6] flex justify-between items-center text-[#737685]">
-                                    <span>Specimen: <strong className="text-[#191c1e]">{test.specimen}</strong></span>
+
+                                  <div className="flex items-center justify-between pt-1 text-[11.5px]">
+                                    <span className="text-slate-600 truncate max-w-[200px]">
+                                      Specimen: <strong>{test.specimen}</strong>
+                                    </span>
                                     <a
-                                      href="tel:+919934358189"
+                                      href={`tel:${LAB_DATA.phone}`}
                                       onClick={(e) => e.stopPropagation()}
-                                      className="text-[#0052cc] font-semibold hover:underline"
+                                      className="bg-[#008000] hover:bg-[#006400] text-white font-semibold text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shadow-xs active:scale-95"
                                     >
-                                      Book test →
+                                      <CalendarPlus className="w-3.5 h-3.5" />
+                                      <span>Book Test</span>
                                     </a>
                                   </div>
                                 </div>
@@ -315,140 +348,174 @@ export default function PricingGuidePage() {
                   );
                 })
               ) : (
-                <div className="bg-white rounded-xl p-8 text-center shadow-sm border border-[#e7e8ea] space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-[#dae2ff] text-[#003d9b] flex items-center justify-center mx-auto">
+                <div className="bg-white rounded-xl p-8 text-center border border-slate-200 space-y-3 shadow-xs">
+                  <div className="w-12 h-12 rounded-full bg-emerald-50 text-[#008000] flex items-center justify-center mx-auto border border-emerald-200">
                     <Search className="w-6 h-6" />
                   </div>
-                  <h3 className="font-semibold text-base text-[#191c1e]">No matching tests found</h3>
-                  <p className="text-xs text-[#737685] max-w-xs mx-auto">
-                    We couldn&apos;t find any tests matching &ldquo;{searchQuery}&rdquo;. Call our lab helpline for custom diagnostic tests and queries.
+                  <h3 className="font-slab font-bold text-base text-slate-900">No matching investigation found</h3>
+                  <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                    No tests match &ldquo;{searchQuery}&rdquo;. Contact our laboratory helpline for custom profile queries.
                   </p>
                   <button
                     onClick={() => {
                       setSearchQuery("");
                       setSelectedCategory("all");
                     }}
-                    className="inline-block text-xs font-semibold text-[#0052cc] hover:underline pt-1"
+                    className="inline-block text-xs font-semibold text-[#008000] hover:underline pt-1 cursor-pointer"
                   >
-                    View all 48 diagnostic tests
+                    View all 48 investigations
                   </button>
                 </div>
               )}
 
-              {/* Quality Standards Badge */}
-              <div className="bg-[#edeef0]/60 rounded-lg p-3 text-center text-xs text-[#434654] flex items-center justify-center gap-1.5 border border-[#e1e2e4]">
-                <CheckCircle2 className="w-4 h-4 text-[#006844] shrink-0" />
-                <span>NABL Quality Standards & Standardized Diagnostic Reporting</span>
+              {/* NABL / Clinical Standards Badge */}
+              <div className="bg-white rounded-xl p-3 text-center text-xs text-slate-600 flex items-center justify-center gap-2 border border-slate-200 shadow-2xs">
+                <CheckCircle2 className="w-4 h-4 text-[#059669] shrink-0" />
+                <span className="font-medium">NABL Quality Standards & Standardized Laboratory Procedures</span>
               </div>
             </>
           ) : (
-            /* Support Tab Content */
-            <div className="space-y-3.5">
-              <div className="bg-white rounded-xl p-5 shadow-sm border border-[#e7e8ea] text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-[#dae2ff] text-[#003d9b] flex items-center justify-center mx-auto">
-                  <Headphones className="w-6 h-6" />
-                </div>
+            /* Support & Clinic Information View */
+            <div className="space-y-3">
+              {/* Brand Letterhead Card */}
+              <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs text-center space-y-3 relative overflow-hidden">
+                <div className="h-1.5 absolute top-0 inset-x-0 bg-gradient-to-r from-[#008000] via-[#3CB371] to-[#0d9488]" />
+                
+                <BrandLogo className="w-12 h-12 mx-auto drop-shadow-sm" />
                 <div>
-                  <h3 className="font-semibold text-lg text-[#191c1e]">
-                    Lab Helpdesk & Inquiries
+                  <h3 className="font-slab font-black text-lg text-slate-900">
+                    DR. ROY&apos;S LABORATORY
                   </h3>
-                  <p className="text-xs text-[#737685] mt-1 max-w-xs mx-auto">
-                    Contact Dr. Roy&apos;s Laboratory directly for home collection bookings, fasting preparation instructions, and digital reports.
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Advanced Diagnostics & Pathology Services
                   </p>
                 </div>
 
-                <div className="pt-2">
+                {/* Primary CTA Button (Component A) */}
+                <div className="pt-1">
                   <a
-                    href="tel:+919934358189"
-                    className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#00687a] hover:bg-[#005564] text-white rounded-full text-sm font-semibold shadow-sm transition-colors"
+                    href={`tel:${LAB_DATA.phone}`}
+                    className="bg-[#008000] hover:bg-[#006400] text-white font-semibold text-sm px-5 py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 w-full"
                   >
                     <Phone className="w-4 h-4" />
-                    Call Lab: +91 9934358189
+                    <span>Call Helpline: +91 9934358189</span>
                   </a>
                 </div>
               </div>
 
-              {/* Laboratory Operations Info Card */}
-              <div className="bg-white rounded-xl p-4 shadow-sm border border-[#e7e8ea] space-y-3">
-                <h4 className="text-sm font-semibold text-[#191c1e] border-b border-[#f3f4f6] pb-2">
-                  Laboratory Information
+              {/* Official Contact & Location Card */}
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs space-y-3">
+                <h4 className="font-slab font-bold text-sm text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                  <Stethoscope className="w-4 h-4 text-[#008000]" />
+                  <span>Laboratory Contact Directory</span>
                 </h4>
-                
-                <div className="flex items-start gap-3 text-xs text-[#434654]">
-                  <Clock className="w-4 h-4 text-[#0052cc] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold text-[#191c1e] block">Sample Collection Hours</span>
-                    <span>Monday – Saturday: 7:00 AM – 8:00 PM<br />Sunday: 7:00 AM – 2:00 PM</span>
+
+                <div className="space-y-2.5 text-xs text-slate-600">
+                  <div className="flex items-start gap-2.5">
+                    <MapPin className="w-4 h-4 text-[#008000] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900 block">Address</span>
+                      <span>Sarkheldih Subhash Chowk, Jamtara, Jharkhand - 815351</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <Mail className="w-4 h-4 text-[#008000] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900 block">Email Inquiries</span>
+                      <a href="mailto:drroylab@gmail.com" className="text-[#2563EB] hover:underline font-mono">
+                        drroylab@gmail.com
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <Globe className="w-4 h-4 text-[#008000] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900 block">Official Website</span>
+                      <span className="font-mono text-slate-700">www.drroyslab.com</span>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex items-start gap-3 text-xs text-[#434654]">
-                  <ShieldCheck className="w-4 h-4 text-[#006844] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold text-[#191c1e] block">Home Sample Collection</span>
-                    <span>Certified phlebotomists available for doorstep sample collection across city limits.</span>
+              {/* Operating Hours & Home Collection */}
+              <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs space-y-3">
+                <h4 className="font-slab font-bold text-sm text-slate-900 border-b border-slate-100 pb-2 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-[#008000]" />
+                  <span>Working Hours & Home Visits</span>
+                </h4>
+
+                <div className="space-y-2 text-xs text-slate-600">
+                  <div className="flex items-start gap-2.5">
+                    <Clock className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900 block">Sample Collection Timings</span>
+                      <span>Monday – Saturday: 7:00 AM – 8:00 PM<br />Sunday: 7:00 AM – 2:00 PM</span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex items-start gap-3 text-xs text-[#434654]">
-                  <Sparkles className="w-4 h-4 text-[#0052cc] shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-semibold text-[#191c1e] block">Digital Reports Delivery</span>
-                    <span>Receive test reports on WhatsApp & Email within standard turnaround times.</span>
+                  <div className="flex items-start gap-2.5">
+                    <ShieldCheck className="w-4 h-4 text-[#059669] shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900 block">Doorstep Sample Collection</span>
+                      <span>Available throughout Jamtara city. Fasting and non-fasting tests supported.</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <button
                 onClick={() => setActiveTab("tests")}
-                className="text-xs font-semibold text-[#0052cc] hover:underline block mx-auto py-2"
+                className="text-xs font-semibold text-[#008000] hover:underline block mx-auto py-2 cursor-pointer"
               >
-                ← Back to Test Pricing Guide
+                ← Back to Test Pricing Directory
               </button>
             </div>
           )}
         </main>
 
-        {/* Floating Home Collection CTA Bar */}
-        <div className="fixed bottom-[58px] left-0 right-0 z-40 flex justify-center px-0 pointer-events-none">
+        {/* Floating Home Collection CTA Bar (Deep Navy with Brand Green accent) */}
+        <div className="fixed bottom-[56px] left-0 right-0 z-40 flex justify-center px-0 pointer-events-none">
           <div className="w-full max-w-md pointer-events-auto">
             <a
-              href="tel:+919934358189"
-              className="block bg-[#00687a] hover:bg-[#005766] active:bg-[#004754] text-white py-2.5 px-4 text-center shadow-[0px_4px_12px_rgba(0,0,0,0.15)] transition-colors"
+              href={`tel:${LAB_DATA.phone}`}
+              className="block bg-[#0f172a] hover:bg-[#006400] text-white py-2.5 px-4 text-center shadow-lg border-t border-teal-600/40 transition-colors"
             >
-              <p className="text-[13px] font-medium flex items-center justify-center gap-2">
-                <Phone className="w-4 h-4 fill-white" />
+              <p className="text-[12.5px] font-medium flex items-center justify-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#008000] animate-pulse" />
+                <Phone className="w-3.5 h-3.5 text-[#3CB371]" />
                 <span>For home collection, call <strong>+91 9934358189</strong></span>
               </p>
             </a>
           </div>
         </div>
 
-        {/* Bottom Navigation Bar (Tests & Support only) */}
+        {/* 2-Tab Bottom Navigation Bar (Tests & Support only) */}
         <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-center bg-transparent pointer-events-none">
-          <div className="w-full max-w-md bg-[#edeef0] border-t border-[#e1e2e4] px-6 py-2 flex justify-around items-center shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] pointer-events-auto">
+          <div className="w-full max-w-md bg-white border-t border-slate-200 px-6 py-2 flex justify-around items-center shadow-md pointer-events-auto">
             <button
               onClick={() => setActiveTab("tests")}
-              className={`flex items-center justify-center gap-2 py-1.5 px-6 rounded-full transition-all active:scale-95 ${
+              className={`flex items-center justify-center gap-2 py-1.5 px-6 rounded-lg transition-all cursor-pointer active:scale-95 ${
                 activeTab === "tests"
-                  ? "bg-[#0052cc] text-white font-medium shadow-xs"
-                  : "text-[#434654] hover:bg-[#e1e2e4]"
+                  ? "bg-[#008000] text-white font-semibold shadow-xs"
+                  : "text-slate-600 hover:bg-slate-100"
               }`}
             >
               <TestTube2 className="w-4 h-4" />
-              <span className="text-xs font-semibold">Tests</span>
+              <span className="text-xs">Tests</span>
             </button>
 
             <button
               onClick={() => setActiveTab("support")}
-              className={`flex items-center justify-center gap-2 py-1.5 px-6 rounded-full transition-all active:scale-95 ${
+              className={`flex items-center justify-center gap-2 py-1.5 px-6 rounded-lg transition-all cursor-pointer active:scale-95 ${
                 activeTab === "support"
-                  ? "bg-[#0052cc] text-white font-medium shadow-xs"
-                  : "text-[#434654] hover:bg-[#e1e2e4]"
+                  ? "bg-[#008000] text-white font-semibold shadow-xs"
+                  : "text-slate-600 hover:bg-slate-100"
               }`}
             >
               <Headphones className="w-4 h-4" />
-              <span className="text-xs font-semibold">Support</span>
+              <span className="text-xs">Support</span>
             </button>
           </div>
         </nav>
@@ -457,6 +524,7 @@ export default function PricingGuidePage() {
     </div>
   );
 }
+
 
 
 

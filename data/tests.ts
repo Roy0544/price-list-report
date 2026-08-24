@@ -15,14 +15,23 @@ export interface Category {
 
 export interface LabPriceGuide {
   laboratory: string;
+  address: string;
+  phone: string;
+  email: string;
+  website: string;
   currency: string;
   categories: Category[];
 }
 
 export const LAB_DATA: LabPriceGuide = {
-  laboratory: "Dr. Roy's Laboratory",
+  laboratory: "DR. ROY'S LABORATORY",
+  address: "Sarkheldih Subhash Chowk, Jamtara, Jharkhand - 815351",
+  phone: "+91 9934358189",
+  email: "drroylab@gmail.com",
+  website: "www.drroyslab.com",
   currency: "INR (₹)",
   categories: [
+
     {
       categoryName: "Hematology",
       reportType: "Blood Report",
